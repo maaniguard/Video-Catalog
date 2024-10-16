@@ -1,0 +1,72 @@
+﻿@model IEnumerable<VideoFile>
+
+@{
+    ViewData["Title"] = "Video Catalog";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/mycatalogstyle.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">@ViewData["Title"]</h1>
+
+        <form asp-controller="Home" asp-action="UploadFiles" method="post" enctype="multipart/form-data" class="mb-4">
+            <div class="mb-3">
+                <input type="file" name="files" multiple class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+
+        <!-- Display Validation Errors -->
+        <div>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        </div>
+
+        <h2 class="mb-4">Catalog</h2>
+        <div class="table-responsive mb-4">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>File Size (MB)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var video in Model)
+                    {
+                        <tr>
+                            <td class="video-link" onclick="playVideo('@video.FileName', this)">@video.FileName</td>
+                            <td>@(video.FileSize / 1024 / 1024) MB</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="video-wrapper text-center mb-4">
+            <video id="videoPlayer" class="w-100" controls></video>
+        </div>
+    </div>
+
+    <script>
+        function playVideo(fileName, element) {
+            var player = document.getElementById('videoPlayer');
+            player.src = '/Media/' + fileName;
+            player.play();
+            
+            // Remove active class from all video links
+            var links = document.querySelectorAll('.video-link');
+            links.forEach(link => link.classList.remove('active'));
+            
+            // Add active class to the clicked link
+            element.classList.add('active');
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
