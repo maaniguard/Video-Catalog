@@ -15,6 +15,6 @@ Video Playback: Watch your videos directly in the app.
 Getting Started
 
 Prerequisites
-.NET Core SDK 3.1 or later
+.NET Core SDK 6.0 or later
 
 Visual Studio 2019 or later
